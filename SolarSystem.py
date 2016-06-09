@@ -41,47 +41,37 @@ class SolarSystem :
         self.physicalTime += step
 
 
-    def plotto(self, ax) :
+    def plotto(self, ax, mode = 'inertial', center = 'origin', refradius = 1.) :
         xxx = []
         yyy = []
         ccc = []
         sss = []
-        for b in self.bodies :
-            xxx.append(b.pos[0]     )
-            yyy.append(b.pos[1]     )
-            ccc.append(b.color      )
-            sss.append(b.visual_radius)
-        ax.scatter(xxx,yyy,s=sss,c=ccc)
 
-    def plotCenteredto(self, ax, center) :
-        xxx = []
-        yyy = []
-        ccc = []
-        sss = []
-        for b in self.bodies :
-            xxx.append(b.pos[0]-center.pos[0])
-            yyy.append(b.pos[1]-center.pos[1])
-            ccc.append(b.color      )
-            sss.append(b.visual_radius)
-        ax.scatter(xxx,yyy,s=sss,c=ccc)
 
-    def plotRotatingto(self, ax, center, refradius=1.) :
-        #not done
-        xxx = []
-        yyy = []
-        ccc = []
-        sss = []
-        angleH = np.sqrt(GCST*center.mass/refradius**3)*self.physicalTime
+        if center == 'origin' :
+            cx = 0.
+            cy = 0.
+        else : 
+            cx = center.pos[0]
+            cy = center.pos[1]
+        if mode == 'corotating' :
+            angleH = np.sqrt(GCST*center.mass/refradius**3)*self.physicalTime
 
         for b in self.bodies :
+    
             #centering
-            x1 = b.pos[0] - center.pos[0]
-            y1 = b.pos[1] - center.pos[1]
-            #... rotating
-            x2 = x1 * np.cos(-angleH) - y1 * np.sin(-angleH)
-            y2 = x1 * np.sin(-angleH) + y1 * np.cos(-angleH)
-            xxx.append(x2)
-            yyy.append(y2)
-            ccc.append(b.color)
+            x1 = b.pos[0] - cx
+            y1 = b.pos[1] - cy
+            if mode == 'corotating' :
+                #... rotating
+                x2 = x1 * np.cos(-angleH) - y1 * np.sin(-angleH)
+                y2 = x1 * np.sin(-angleH) + y1 * np.cos(-angleH)
+                xxx.append(x2)
+                yyy.append(y2)
+            else :
+                xxx.append(x1)
+                yyy.append(y1)
+                    
+            ccc.append(b.color      )
             sss.append(b.visual_radius)
         ax.scatter(xxx,yyy,s=sss,c=ccc)

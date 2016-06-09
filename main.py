@@ -3,34 +3,21 @@ from SolarSystem import *
 import pylab as pl
 import time
 
-framelim = 1.5
+framelim = 2.
 
-sun     = Planet('The Mighty Sun', mass=1., coords=[0.,0],                   color='yellow')
-jup     = Planet('Jupiter',        mass=9e-4, coords=[1.,0.], color='orange'
-#                 , isTest=True
-             )
-
-vulcain = Planet('Vulcain',        mass=1e-6, coords=[0.,0.99], color='blue' 
-                 ,isTest=True
-             ) 
+sun     = Planet('The Mighty Sun', mass=1.,   coords=[0.,0],    color='yellow')
+jup     = Planet('Jupiter',        mass=9e-4, coords=[1.,0.],   color='orange')
+vulcain = Planet('Vulcain',        mass=1e-6, coords=[0.,0.95], color='blue',isTest=True) 
 
 sys     = SolarSystem ([sun, jup, vulcain])
 sys.setKeplerianMotion()
-
-
-#raw_input()
-#print jup.vx, jup.vy
-
-
-
-print "all went well !"
 
 fig,(ax0,ax1,ax2) = pl.subplots(ncols=3, figsize = (18,5))
 
 pl.ion()
 pl.show()
 for i in range(int(1e7)) :
-    sys.walkOneStep(STEP*1e5)
+    sys.walkOneStep(STEP*1e7)
     if i %4e2 ==0 :
         for ax in fig.axes :
             ax.cla()
@@ -38,8 +25,8 @@ for i in range(int(1e7)) :
             ax.set_ylim([-framelim, + framelim])
 
         sys.plotto         (ax0)
-        sys.plotCenteredto (ax1, center=jup)
-        sys.plotRotatingto (ax2, center=sun)
+        sys.plotto (ax1, mode='centering' , center=jup)
+        sys.plotto (ax2, mode='corotating', center=sun)
         pl.draw()
         #time.sleep(0.1)
 pl.ioff()
