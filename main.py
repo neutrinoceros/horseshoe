@@ -5,22 +5,34 @@ import time
 
 framelim = 2.
 
+
+print "---------------------------------------"
+print "Initializing..."
 sun     = Planet('The Mighty Sun', mass=1.,   coords=[0.,0],    color='yellow')
 jup     = Planet('Jupiter',        mass=9e-4, coords=[1.,0.],   color='orange')
 vulcain = Planet('Vulcain',        mass=1e-6, coords=[0.,0.95], color='blue',isTest=True) 
 
 sys     = SolarSystem ([sun, jup, vulcain])
 sys.setKeplerianMotion()
+print "System is set in Keplerian motion !"
 
+
+
+#=======================================================
+#                Running/plotting loop
+#=======================================================
 fig,(ax0,ax1,ax2) = pl.subplots(ncols=3, figsize = (18,5))
+titles = ["Inertial frame","Jupiter-centered frame","Jupiter co-rotating frame"]
+
 
 pl.ion()
 pl.show()
 for i in range(int(1e7)) :
     sys.walkOneStep(STEP*1e7)
     if i %4e2 ==0 :
-        for ax in fig.axes :
+        for ax,tit in zip(fig.axes,titles) :
             ax.cla()
+            ax.set_title(tit)
             ax.set_xlim([-framelim, + framelim])
             ax.set_ylim([-framelim, + framelim])
 
