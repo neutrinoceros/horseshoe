@@ -27,19 +27,29 @@ titles = ["Inertial frame","Jupiter-centered frame","Jupiter co-rotating frame"]
 
 pl.ion()
 pl.show()
-for i in range(int(1e7)) :
-    sys.walkOneStep(STEP*1e7)
-    if i %4e2 ==0 :
+for i in range(int(1e5)) :
+    sys.walkOneStep(STEP*1e6)
+    if i %4e2 == 0 :
         for ax,tit in zip(fig.axes,titles) :
             ax.cla()
             ax.set_title(tit)
             ax.set_xlim([-framelim, + framelim])
             ax.set_ylim([-framelim, + framelim])
+            ax.set_aspect('equal')
 
-        sys.plotto         (ax0)
+        sys.plotto (ax0)
         sys.plotto (ax1, mode='centering' , center=jup)
         sys.plotto (ax2, mode='corotating', center=sun)
+        
+        for b in sys.bodies :
+            b.traj.append([b.pos[0],b.pos[1]])
+            if i == 0 : 
+                b.traj.tab = np.delete(b.traj.tab,(0),axis=0)
+            b.traj.plotto(ax0)
+
         pl.draw()
         #time.sleep(0.1)
+        
+
 pl.ioff()
 raw_input()

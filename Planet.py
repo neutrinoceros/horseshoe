@@ -1,4 +1,6 @@
+
 import numpy as np
+from Trajectory import *
 from constants import *
 
 
@@ -13,6 +15,8 @@ class Planet :
         self.visual_radius = 2000*mass**(1./3) #wip
         self.color         = color
         self.name          = name
+        self.traj          = Trajectory(dimension=2, color = self.color)
+
 
     def getDistanceTo(self, otherBody) :
         direction = otherBody.pos - self.pos

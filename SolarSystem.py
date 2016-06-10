@@ -1,5 +1,5 @@
 from Planet import *
-
+from horseshoemaths import *
 
 def gravity(b1,b2) :
     d         = b1.getDistanceTo(b2)
@@ -47,31 +47,29 @@ class SolarSystem :
         ccc = []
         sss = []
 
-
         if center == 'origin' :
-            cx = 0.
-            cy = 0.
+            centerpos = np.zeros(2)
         else : 
-            cx = center.pos[0]
-            cy = center.pos[1]
+            centerpos = center.pos
+
         if mode == 'corotating' :
             angleH = np.sqrt(GCST*center.mass/refradius**3)*self.physicalTime
 
         for b in self.bodies :
-    
+
             #centering
-            x1 = b.pos[0] - cx
-            y1 = b.pos[1] - cy
+            x1,y1 = get_centered(b.pos, centerpos)
+
             if mode == 'corotating' :
                 #... rotating
-                x2 = x1 * np.cos(-angleH) - y1 * np.sin(-angleH)
-                y2 = x1 * np.sin(-angleH) + y1 * np.cos(-angleH)
+                x2,y2 = get_rotated(np.array([x1,y1]),angleH)
                 xxx.append(x2)
                 yyy.append(y2)
+
             else :
                 xxx.append(x1)
                 yyy.append(y1)
-                    
-            ccc.append(b.color      )
+
+            ccc.append(b.color)
             sss.append(b.visual_radius)
         ax.scatter(xxx,yyy,s=sss,c=ccc)
