@@ -1,3 +1,6 @@
+#!/usr/bin/python
+#-*-coding:utf-8-*-
+
 from Planet import *
 from SolarSystem import *
 import pylab as pl
@@ -24,9 +27,12 @@ print "System is set in Keplerian motion !"
 fig,(ax0,ax1,ax2) = pl.subplots(ncols=3, figsize = (18,5))
 titles = ["Inertial frame","Jupiter-centered frame","Jupiter co-rotating frame"]
 
+for ax in fig.axes :
+    ax.set_aspect('equal')
 
 pl.ion()
 pl.show()
+
 for i in range(int(1e5)) :
     sys.walkOneStep(STEP*1e6)
     if i %4e2 == 0 :
@@ -35,7 +41,7 @@ for i in range(int(1e5)) :
             ax.set_title(tit)
             ax.set_xlim([-framelim, + framelim])
             ax.set_ylim([-framelim, + framelim])
-            ax.set_aspect('equal')
+
 
         sys.plotto (ax0)
         sys.plotto (ax1, mode='centering' , center=jup)
@@ -52,4 +58,4 @@ for i in range(int(1e5)) :
         
 
 pl.ioff()
-raw_input()
+raw_input('press anykey to quit     ')
