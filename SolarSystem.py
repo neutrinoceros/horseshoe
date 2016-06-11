@@ -1,6 +1,7 @@
 from Planet import *
 from horseshoemaths import *
 
+from os import system
 def gravity(b1,b2) :
     d         = b1.getDistanceTo(b2)
     intensity = GCST*b1.mass*b2.mass/d**2
@@ -10,13 +11,21 @@ def gravity(b1,b2) :
 
 class SolarSystem :
     
-    def __init__(self, planets) :
+    def __init__(self, planets,rep="") :
         if type(planets) == Planet :
             self.sun    = planets
         elif type(planets) == list :
             self.sun    = planets[0]
             self.bodies = planets
         self.physicalTime = 0.
+
+        if rep!="" :
+            system("mkdir {}".format(rep))
+            with open(rep+"/masses.dat",'w') as fi :
+                line = ""
+                for b in self.bodies :
+                    line += str(b.mass) + "    "
+                fi.write(line)
 
 
     def setKeplerianMotion(self) :
@@ -39,6 +48,22 @@ class SolarSystem :
                     
             b1.walk(step)
         self.physicalTime += step
+
+
+    def writeTo(self,filepos,filevel) :
+        with open(filepos,'a') as fi :
+            line = ""
+            for b in self.bodies :
+                line += str(b.pos[0]) + "    " +str(b.pos[1]) + "    "
+            line += "\n"
+            fi.write(line)
+
+        with open(filevel,'a') as fi :
+            line = ""
+            for b in self.bodies :
+                line += str(b.vel[0]) + "    " +str(b.vel[1]) + "    "
+            line += "\n"
+            fi.write(line)
 
 
     def plotto(self, ax, mode = 'inertial', center = 'origin', refradius = 1.) :
