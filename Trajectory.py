@@ -7,9 +7,10 @@ class Trajectory :
         self.ls  = ls
         self.color = color
 
-    def append(self, arg) :
+    def append(self, arg, init=False) :
         self.tab = np.vstack([self.tab,arg])
-#        print self.tab
+        if init :
+            self.tab = np.delete(self.tab,(0),axis=0)
 
     def plotto(self,ax) :
 

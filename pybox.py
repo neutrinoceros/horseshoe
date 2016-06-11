@@ -6,3 +6,11 @@ def get_script_args () :
     return args
 
 clearLastLine = lambda : sys.stdout.write("\033[F")
+
+
+
+def readtxt(filename) :
+    with open(filename,'r') as fi :
+        res = fi.readline().split("    ")
+
+    return res

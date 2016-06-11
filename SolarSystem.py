@@ -19,6 +19,7 @@ class SolarSystem :
             self.bodies = planets
         self.physicalTime = 0.
 
+        self.rep = rep
         if rep!="" :
             system("mkdir {}".format(rep))
             with open(rep+"/masses.dat",'w') as fi :
@@ -26,6 +27,13 @@ class SolarSystem :
                 for b in self.bodies :
                     line += str(b.mass) + "    "
                 fi.write(line)
+
+            with open(rep+"/names.dat",'w') as fi :
+                fi.write("    ".join([b.name for b in self.bodies]))
+
+            with open(rep+"/colors.dat",'w') as fi :
+                fi.write("    ".join([b.color for b in self.bodies]))
+
 
 
     def setKeplerianMotion(self) :
@@ -50,7 +58,13 @@ class SolarSystem :
         self.physicalTime += step
 
 
-    def writeTo(self,filepos,filevel) :
+    def write(self) :
+        filepos  = self.rep+"/positions.dat"
+        filevel  = self.rep+"/velocities.dat"
+        filetime = self.rep+"/time.dat"
+        with open(filetime,'a') as fi :
+            fi.write(str(self.physicalTime)+"\n")
+
         with open(filepos,'a') as fi :
             line = ""
             for b in self.bodies :
